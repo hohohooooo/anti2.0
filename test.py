@@ -33,7 +33,7 @@ def load_excel_data(path_to_excel_folder):
     return all_data_content, all_data_score
 
 # 全局變數：在應用啟動時載入所有公司資料
-path = "C:/Users/user/Desktop/desktop20240902/漂綠/digitalday"
+path = "./DATA"
 company_data_content, company_data_score = load_excel_data(path)
 
 def df2json(df_content, df_score):
