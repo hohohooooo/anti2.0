@@ -178,12 +178,12 @@ def get_company_data(name: str):
     }
     for main_company, aliases in company_dict.items():
         if name in aliases:
-            name2 = main_company 
+            name = main_company 
 
 
     # 根據公司名稱查詢資料
-    result_content = company_data_content[company_data_content['公司名稱'] == name2]
-    result_score = company_data_score[company_data_score['公司名稱'] == name2]   
+    result_content = company_data_content[company_data_content['公司名稱'] == name]
+    result_score = company_data_score[company_data_score['公司名稱'] == name]   
     if result_content.empty:
         raise HTTPException(status_code=404, detail="Company not found")
     # df2json
