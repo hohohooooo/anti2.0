@@ -39,13 +39,14 @@ def df2json(df_content, df_score):
     company_info = df_score.iloc[0].to_dict()
 
     # 構建 "評分" 字典，移除 "公司名稱" 並保留其他欄位
-    score_info = {key: company_info[key] for key in company_info if key != '公司名稱'}
+    score_info = {key: company_info[key] for key in company_info if key != '公司名稱' and key != '摘要'}
 
     output = {
         "公司名稱": company_info['公司名稱'],
         "評分": score_info,
         "是否符合驗測項目":converted_list,
-        "相關內容": content_list
+        "相關內容": content_list,
+        "摘要":company_info['摘要']
     }
     # 輸出結果
     return output
@@ -53,8 +54,8 @@ def df2json(df_content, df_score):
 def assistant(messages):
     ## with plugin
     ASSISTANT_API = 'https://prod.dvcbot.net/api/assts/v1'
-    API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiVVNFUjAzQFNLRkhDT1JQLkNPTSIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNDk5OTgzNiwianRpIjoiMzhmNTcwMTctMTFkMy00ZWEyLTkwOWEtYTlhZWZjY2RlZjA3In0.IS_Mbz7VgnzoZlD2gaRdUTp-C0-Iqwjb1TY6J6jYU-0'
-    ASSISTANT_ID = 'asst_dvc_kiQ0bA64ddfvZTF7MkVpLjCF'
+    API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiVVNFUjAxQFNLRkhDT1JQLkNPTSIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyMTM3OTQ0NywianRpIjoiOTk4NTZiY2EtYjFkMC00OWJkLWFhMDctYjY0ZDBmNGE3NzJhIn0.ATijnDev3sOYrAPpNDZO4_r18kWiHOq39znqqeDrrO0'
+    ASSISTANT_ID = 'asst_dvc_wNbWLbW9BjbGhJIGH8QGM48X'
 
     client = OpenAI(
         base_url=ASSISTANT_API,
@@ -193,21 +194,14 @@ def get_company_data(name: str):
 
 def internet_search(message: str):
     ##
-    ASSISTANT_API = 'https://prod.dvcbot.net/api/assts/v1'
-    API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJEVkNBU1NJIiwic3ViIjoiVVNFUjIwQFNLRkhDT1JQLkNPTSIsImF1ZCI6WyJEVkNBU1NJIl0sImlhdCI6MTcyNTUwNzQ0MywianRpIjoiNWY5OTIxY2EtZGE1Mi00ODA5LWFhNzAtNDEyYzk2ZWI4ZmU4In0.2T5JMK-4-tb-xpfFoLWwHEyLY71i-6bF-8mxGHEgLyI"
-    ASSISTANT_ID = 'asst_dvc_PFMdeuH2HgWdFea683qE7Pnu'
 
-    client = OpenAI(
-        base_url=ASSISTANT_API,
-        api_key=API_KEY,
-    )
     messages = [
         {"type": "text", "text": f"{message}"}
     ]
     output = assistant(messages)
     output = output.replace('```json', '').replace('```', '')
     data = json.loads(output)
-    return data['環境'], data['社會'], data['公司']
+    return [data['環境'], data['社會'], data['公司'], data['摘要']]
 
 
 if __name__ == "__main__":
