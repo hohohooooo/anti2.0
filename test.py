@@ -146,9 +146,43 @@ def get_company_data(name: str):
     path = "./DATA"
     company_data_content, company_data_score = load_excel_data(path)
     
+    # check
+    company_dict = {
+        "新光": ['新光','新光金', '新光金控','2888'],
+        "中信": ['中信','中信金','中信金控','2891'],
+        "元大": ['元大','元大金','元大金控','2885'],
+        "台新": ['台新','台新金','台新金控','2887'],
+        "永豐": ['永豐','永豐金','永豐金控','2890'],
+        "玉山": ['玉山','玉山金','玉山金控','2884'],
+        "兆豐": ['兆豐','兆豐金','兆豐金控','2886'],
+        "合庫": ['合庫','合庫金','合庫金控','5880'],
+        "國泰": ['國泰','國泰金','國泰金控','2882'],
+        "國票": ['國票','國票金','國票金控','2889'],
+        "第一": ['第一','第一金','第一金控','2892'],
+        "富邦": ['富邦','富邦金','富邦金控','2881'],
+        "華南": ['華南','華南金','華南金控','2880'],
+        "開發": ['開發','開發金','開發金控','2883'],
+        "久陽精密":["久陽精密","久陽","5011"],
+        "台鋼":["台鋼","台灣鋼聯","鋼聯",'6581'],
+        "台灣苯乙烯":["台灣苯乙烯","台苯","1310"],
+        "名軒開發":["名軒開發","名軒","1442"],
+        "至上":["至上","至上電子","8112"],
+        "東和鋼鐵":["東和鋼鐵","2006"],
+        "建新":["建新","建新國際","8367"],
+        "泰鼎":["泰鼎","泰鼎國際","泰鼎-KY","4927"],
+        "訊芯":['訊芯',"訊芯科技","訊芯-KY","6451"],
+        "雲豹能源":['雲豹能源',"雲豹能源創","雲豹能源-創","6869"],
+        "榮剛":['榮剛',"榮剛材料科技","5009"]
+
+    }
+    for main_company, aliases in company_dict.items():
+        if name in aliases:
+            name2 = main_company 
+
+
     # 根據公司名稱查詢資料
-    result_content = company_data_content[company_data_content['公司名稱'] == name]
-    result_score = company_data_score[company_data_score['公司名稱'] == name]   
+    result_content = company_data_content[company_data_content['公司名稱'] == name2]
+    result_score = company_data_score[company_data_score['公司名稱'] == name2]   
     if result_content.empty:
         raise HTTPException(status_code=404, detail="Company not found")
     # df2json
